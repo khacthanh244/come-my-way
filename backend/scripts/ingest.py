@@ -1,6 +1,6 @@
 """
-Run this script once to ingest PDFs into ChromaDB.
-Usage: python scripts/ingest.py [--pdf-dir data/pdfs]
+Run this script once to ingest documents (PDF, Markdown) into ChromaDB.
+Usage: python scripts/ingest.py [--data-dir data/pdfs]
 """
 import argparse
 import os
@@ -11,22 +11,24 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
 
 from langchain_chroma import Chroma
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.config import settings
 
 
-def ingest(pdf_dir: str) -> None:
-    pdf_path = Path(pdf_dir)
-    pdf_files = list(pdf_path.glob("*.pdf"))
+def ingest(data_dir: str) -> None:
+    data_path = Path(data_dir)
+    pdf_files = sorted(data_path.glob("*.pdf"))
+    md_files = sorted(data_path.glob("*.md"))
 
-    if not pdf_files:
-        print(f"No PDF files found in {pdf_dir}")
+    if not pdf_files and not md_files:
+        print(f"No PDF or Markdown files found in {data_dir}")
         return
 
-    print(f"Found {len(pdf_files)} PDF file(s): {[f.name for f in pdf_files]}")
+    names = [f.name for f in pdf_files + md_files]
+    print(f"Found {len(names)} file(s): {names}")
 
     docs = []
     for pdf_file in pdf_files:
@@ -37,16 +39,21 @@ def ingest(pdf_dir: str) -> None:
             page.metadata["source"] = pdf_file.name
         docs.extend(pages)
 
-    print(f"Total pages loaded: {len(docs)}")
+    for md_file in md_files:
+        print(f"Loading {md_file.name}...")
+        loader = TextLoader(str(md_file), encoding="utf-8")
+        md_docs = loader.load()
+        for doc in md_docs:
+            doc.metadata["source"] = md_file.name
+        docs.extend(md_docs)
+
+    print(f"Total documents loaded: {len(docs)}")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = splitter.split_documents(docs)
     print(f"Total chunks after splitting: {len(chunks)}")
 
-    embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=settings.openai_api_key,
-    )
+    embeddings = HuggingFaceEmbeddings(model_name=settings.embedding_model)
 
     print("Embedding and storing in ChromaDB...")
     vectorstore = Chroma.from_documents(
@@ -60,7 +67,10 @@ def ingest(pdf_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ingest PDFs into ChromaDB")
-    parser.add_argument("--pdf-dir", default="data/pdfs", help="Directory containing PDF files")
+    parser = argparse.ArgumentParser(description="Ingest PDF and Markdown files into ChromaDB")
+    parser.add_argument(
+        "--data-dir", "--pdf-dir", dest="data_dir", default="data/pdfs",
+        help="Directory containing PDF/Markdown files",
+    )
     args = parser.parse_args()
-    ingest(args.pdf_dir)
+    ingest(args.data_dir)

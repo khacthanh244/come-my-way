@@ -32,19 +32,6 @@ export function MessageBubble({ message }: Props) {
             </span>
           )}
         </div>
-
-        {!isUser && message.sources && message.sources.length > 0 && (
-          <div className="flex flex-wrap gap-1 px-1">
-            {message.sources.map(src => (
-              <span
-                key={src}
-                className="text-xs bg-blue-50 text-blue-600 border border-blue-200 rounded-full px-2 py-0.5"
-              >
-                {src}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {isUser && (

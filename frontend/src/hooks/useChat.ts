@@ -76,9 +76,11 @@ export function useChat() {
             continue
           }
 
+          // Content chunks are JSON-encoded strings so newlines survive SSE framing
+          const chunk = data.startsWith('"') ? (JSON.parse(data) as string) : data
           setMessages(prev =>
             prev.map(m =>
-              m.id === assistantId ? { ...m, content: m.content + data } : m
+              m.id === assistantId ? { ...m, content: m.content + chunk } : m
             )
           )
         }

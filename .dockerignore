@@ -1,0 +1,16 @@
+backend/.venv/
+backend/.env
+backend/app/__pycache__/
+backend/app/**/__pycache__/
+frontend/node_modules/
+frontend/dist/
+.greennode.json
+.agentbase/
+.agentbase-state.json
+*.credentials.json
+.git/
+.claude/
+greennode-agentbase-skills/
+*.md
+!frontend/src/docs/*.md
+!backend/data/pdfs/*.md

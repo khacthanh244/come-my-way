@@ -1,0 +1,17 @@
+# merchant-support-OA-scenarios(1)
+
+
+# Sheet: Kịch bản
+
+| Danh mục | Tình huống | Nội dung phản hồi |
+| --- | --- | --- |
+| 1. Quy trình đăng ký | Quy trình đăng ký | Đối tác vui lòng thực hiện các bước sau để đăng ký tài khoản trên trang doanh nghiệp của Zalopay:<br>Bước 1: Truy cập https://mc.zalopay.vn/<br>Bước 2: Tại màn hình đăng nhập, lựa chọn "Trở thành đối tác"<br>Bước 3: Nhập số điện thoại để nhận mã OTP<br>Bước 4: Nhập mã xác thực OTP được gửi về số đăng ký<br>Bước 5: Xác nhận mật khẩu & Email để hoàn thành bước Tạo thông tin đăng nhập<br>Bước 6: Nhập các thông tin kinh doanh. Bao gồm: Ngành nghề kinh doanh, Loại hình kinh doanh, Thông tin cửa hàng, Thông tin người đại diện, Thông tin thanh toán. Sau đó nhấn "Tiếp tục"<br>Bước 7: Tài khoản Quý đối tác sẽ nhận được khoản tiền từ 2000 - 2100 với nội dung "SOB NHAP SO TIEN VAO DE XAC NHAN KY HOP DONG VOI ZALOPAY". Nhập số tiền nhận được và nhấn "Hoàn thành"<br>Bước 8: Hồ sơ đã đăng ký hoàn tất. Màn hình sẽ chuyển đến trang Merchant tool |
+|  | Hồ sơ đăng ký chưa được duyệt | Quý đối tác vui lòng cung cấp thông tin Số điện thoại đăng ký tài khoản Zalopay Merchant bên dưới để Zalopay hỗ trợ kiểm tra. |
+|  | Đăng ký bị lỗi | Quý đối tác vui lòng cung cấp thông tin Số điện thoại đăng ký tài khoản Zalopay Merchant bên dưới để Zalopay hỗ trợ kiểm tra. |
+|  | Tư vấn biểu phí dịch vụ | Để được tư vấn chi tiết về biểu phí dịch vụ, Quý đối tác vui lòng:<br><br>📧 Gửi email đến: op@zalopay.vn<br><br>hoặc<br>📞 Để lại số điện thoại bên dưới để Zalopay chủ động liên hệ hỗ trợ.<br><br>Zalopay sẽ phản hồi trong thời gian sớm nhất. |
+| 2. Thông tin đăng nhập | Tài khoản đã tồn tại tại bước Tạo tài khoản | Để tiếp tục các bước đăng ký, Quý đối tác vui lòng thực hiện theo các bước sau:<br>Bước 1: Tại màn hình nhấn "Đăng nhập"<br>Bước 2: Chọn "Quên mật khẩu"<br>Bước 3: Nhập lại chính xác số điện thoại đăng ký để nhận mã xác nhận OTP xác minh tài khoản<br>Bước 4: Chọn "Gửi yêu cầu"<br>Bước 5: Xác nhận lại mật khẩu và nhập "Mã xác nhận OTP" đã gửi về số điện thoại đăng ký<br>Bước 6: Nhấn "Hoàn thành"<br>Bước 7: Về trang đăng nhập<br>Bước 8: Nhập thông tin số điện thoại và mật khẩu vừa tạo để đăng nhập vào tài khoản |
+|  | Tôi không nhận được mã OTP | Trong trường hợp Quý đối tác không nhận được mã OTP gửi về điện thoại vui lòng cung cấp thông tin Số điện thoại đăng ký tài khoản với Zalopay để Zalopay liên hệ hỗ trợ. |
+| 3. Thông tin thanh toán | Ngân hàng không có trong DS | Rất tiếc! Hiện tại Zalopay chỉ hỗ trợ các ngân hàng trong danh sách chọn, Quý đối tác vui lòng thay đổi ngân hàng theo danh sách chọn của Zalopay. |
+|  | Tên chủ TK không khớp Tên người đại diện | Quý đối tác vui lòng nhập thông tin Số tài khoản ngân hàng của người đại diện đăng ký.<br>Yêu cầu thông tin Tên chủ tài khoản phải trùng với Tên trên CMND/CCCD của người đại diện.  |
+|  | Không nhận được OTP ngân hàng | Thời gian nhận mã từ 30 giây sau khi Quý đối tác cung cấp thông tin số tài khoản. <br>Trường hợp sau 24 tiếng Quý đối tác vẫn chưa nhận được mã từ Zalopay, vui lòng liên hệ tổng đài 1900 54 54 36/ nhánh 3 hoặc gửi email đến địa chỉ op@zalopay.vn hoặc cung cấp Số điện thoại đăng ký tài khoản Zalopay để được hỗ trợ. |
+|  | Chuyển ngân hàng đăng ký | Quý đối tác không thể tự thực hiện thay đổi ngân hàng trong quá trình đăng ký. <br>Để có thể thay đổi sang ngân hàng khác Quý đối tác vui lòng liên hệ tổng đài 1900 54 54 36/ nhánh 3 hoặc gửi email đến địa chỉ op@zalopay.vn hoặc cung cấp thông tin Số điện thoại đăng ký tài khoản Zalopay để được hỗ trợ. |

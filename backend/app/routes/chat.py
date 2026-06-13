@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -27,12 +27,15 @@ async def health():
 async def chat(req: ChatRequest):
     history = [{"role": h.role, "content": h.content} for h in req.history]
 
-    if req.stream:
-        return StreamingResponse(
-            rag_stream(req.message, history),
-            media_type="text/event-stream",
-            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-        )
+    try:
+        if req.stream:
+            return StreamingResponse(
+                rag_stream(req.message, history),
+                media_type="text/event-stream",
+                headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+            )
 
-    result = await rag_answer(req.message, history)
-    return result
+        result = await rag_answer(req.message, history)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

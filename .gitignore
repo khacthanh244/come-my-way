@@ -1,0 +1,5 @@
+.greennode.json
+.agentbase/
+.venv/
+
+.DS_Store
