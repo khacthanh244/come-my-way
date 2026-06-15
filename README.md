@@ -1,7 +1,5 @@
 # Come My Way — Merchant Support AI Chatbot
 
-AI chatbot hỗ trợ merchant tra cứu thông tin từ tài liệu hướng dẫn PDF, không cần liên hệ support team.
-
 Zalopay Sky Agent
 
 Zalopay đang cung cấp nhiều giải pháp thanh toán cho đa dạng nhóm merchant. Tuy nhiên trong quá trình tìm hiểu sản phẩm, lựa chọn phương án tích hợp và triển khai kỹ thuật, merchant thường phải trao đổi qua lại nhiều lần với đội ngũ hỗ trợ để làm rõ tài liệu, luồng nghiệp vụ và cách tích hợp. Điều này tạo ra khối lượng lớn câu hỏi lặp lại, kéo dài thời gian go-live, ảnh hưởng SLA hỗ trợ và trải nghiệm của cả merchant lẫn Zalopay.
