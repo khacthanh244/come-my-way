@@ -169,7 +169,7 @@ export function MerchantDev() {
       {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-blue-1000 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:bg-blue-900 transition-colors"
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full border-2 border-white bg-blue-1000 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:bg-blue-900 transition-colors"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2z" />

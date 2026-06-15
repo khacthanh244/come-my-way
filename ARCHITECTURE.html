@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Come My Way — Sky Agent · Kiến trúc hệ thống A→Z</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --panel: #121a2e;
+    --panel-2: #1a2440;
+    --line: #2a3658;
+    --blue: #2f6bff;
+    --cyan: #28c8d8;
+    --green: #2ecc8f;
+    --amber: #f5a623;
+    --purple: #9b6bff;
+    --pink: #ff5d8f;
+    --txt: #e8eefc;
+    --muted: #8b97b8;
+    --code: #ffd479;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 700px at 80% -10%, #16224a 0%, var(--bg) 55%);
+    color: var(--txt);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+  }
+  header {
+    padding: 40px 32px 24px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+  header .badge {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin-bottom: 14px;
+  }
+  header h1 { margin: 0; font-size: 34px; }
+  header h1 span { color: var(--blue); }
+  header p { color: var(--muted); margin: 8px auto 0; max-width: 760px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 80px; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+
+  /* Section */
+  .section { margin-top: 46px; }
+  .section > h2 {
+    font-size: 22px;
+    margin: 0 0 4px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section > h2 .num {
+    width: 34px; height: 34px; flex: none;
+    border-radius: 9px;
+    display: grid; place-items: center;
+    font-size: 15px; font-weight: 700;
+    background: var(--blue); color: #fff;
+  }
+  .section > .sub { color: var(--muted); margin: 0 0 18px 46px; font-size: 14px; }
+
+  /* Cards / boxes */
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch; }
+  .box {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    flex: 1 1 220px;
+    min-width: 200px;
+    position: relative;
+  }
+  .box .tag {
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px; display: block;
+  }
+  .box h3 { margin: 0 0 6px; font-size: 16px; }
+  .box p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .box code, code.inline {
+    background: #0c1322; color: var(--code);
+    padding: 1px 6px; border-radius: 5px; font-size: 12.5px;
+    border: 1px solid #20304f;
+  }
+  .box ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+  .box ul li { margin: 3px 0; }
+
+  .accent-blue   { border-color: var(--blue);   box-shadow: inset 0 0 0 1px rgba(47,107,255,.25); }
+  .accent-cyan   { border-color: var(--cyan);   box-shadow: inset 0 0 0 1px rgba(40,200,216,.25); }
+  .accent-green  { border-color: var(--green);  box-shadow: inset 0 0 0 1px rgba(46,204,143,.25); }
+  .accent-amber  { border-color: var(--amber);  box-shadow: inset 0 0 0 1px rgba(245,166,35,.25); }
+  .accent-purple { border-color: var(--purple); box-shadow: inset 0 0 0 1px rgba(155,107,255,.25); }
+  .accent-pink   { border-color: var(--pink);   box-shadow: inset 0 0 0 1px rgba(255,93,143,.25); }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+  /* arrows */
+  .arrow {
+    align-self: center;
+    color: var(--cyan);
+    font-size: 26px;
+    flex: 0 0 auto;
+    padding: 0 2px;
+  }
+  .arrow.down { width: 100%; text-align: center; }
+
+  .flowlabel {
+    font-size: 11.5px; color: var(--muted);
+    text-align: center; margin: 2px 0;
+  }
+
+  /* numbered pipeline */
+  .pipe { counter-reset: step; }
+  .pipe .step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 3px solid var(--blue);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .pipe .step .n {
+    counter-increment: step;
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 13px;
+    display: grid; place-items: center;
+  }
+  .pipe .step .n::before { content: counter(step); }
+  .pipe .step h4 { margin: 2px 0 4px; font-size: 14.5px; }
+  .pipe .step p { margin: 0; font-size: 13px; color: var(--muted); }
+  .pipe .step code { background:#0c1322; color:var(--code); padding:1px 5px; border-radius:4px; font-size:12px; border:1px solid #20304f;}
+
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-top: 14px; }
+  .legend span b { color: var(--txt); font-weight: 600; }
+
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; padding: 26px; border-top: 1px solid var(--line); }
+  .mono { font-family: "SF Mono", "Consolas", monospace; }
+  .pill { display:inline-block; background:#0c1322; border:1px solid #20304f; border-radius:6px; padding:2px 8px; font-size:12px; color:var(--cyan); margin:2px 4px 2px 0;}
+</style>
+</head>
+<body>
+<header>
+  <span class="badge">Come My Way · Hackathon VNG</span>
+  <h1><span>Sky Agent</span> — RAG Chatbot hỗ trợ Merchant Zalopay</h1>
+  <p>Kiến trúc & luồng chạy chi tiết từ A→Z: từ tài liệu PDF/Markdown → vector store → giao diện người dùng → backend RAG → AgentBase LLM → câu trả lời streaming. Stack: <b>FastAPI · LangChain · ChromaDB · React 19 · Vite · Tailwind v4 · VNG AgentBase</b>.</p>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ BIG PICTURE ============ -->
+  <div class="section">
+    <h2><span class="num">A</span> Bức tranh tổng thể (10.000 ft)</h2>
+    <p class="sub">3 lớp chính: Người dùng (Browser SPA) ⇄ Backend RAG (FastAPI) ⇄ AgentBase LLM Runtime. Knowledge base được nạp offline 1 lần.</p>
+    <div class="row">
+      <div class="box accent-cyan">
+        <span class="tag">① Offline / Build-time</span>
+        <h3>📚 Ingestion</h3>
+        <p>14 file <code>.md</code> tài liệu Zalopay → cắt chunk → embed → lưu vào ChromaDB. Chạy 1 lần bằng <code>scripts/ingest.py</code>.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box accent-blue">
+        <span class="tag">② Frontend (SPA)</span>
+        <h3>🖥️ React + Vite</h3>
+        <p>3 trang theo URL: <code>/mc</code> Merchant, <code>/dev</code> Developer, <code>/</code> Docs. Người dùng chat qua overlay.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box accent-green">
+        <span class="tag">③ Backend (RAG)</span>
+        <h3>⚙️ FastAPI</h3>
+        <p><code>POST /api/chat</code> → truy hồi top-5 chunk + ghép prompt + gọi LLM → trả về SSE streaming.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box accent-purple">
+        <span class="tag">④ LLM</span>
+        <h3>🧠 AgentBase Runtime</h3>
+        <p>Endpoint VNG Cloud <code>/invocations</code> nhận 1 prompt, sinh câu trả lời cho <b>Sky Agent</b>.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--cyan)"></span><b>Offline</b> — chạy 1 lần</span>
+      <span><span class="dot" style="background:var(--blue)"></span><b>Client</b> — trình duyệt</span>
+      <span><span class="dot" style="background:var(--green)"></span><b>Server</b> — FastAPI</span>
+      <span><span class="dot" style="background:var(--purple)"></span><b>External</b> — VNG AgentBase</span>
+    </div>
+  </div>
+
+  <!-- ============ INGESTION ============ -->
+  <div class="section">
+    <h2><span class="num">B</span> Pipeline nạp dữ liệu (Ingestion) — offline</h2>
+    <p class="sub">File: <code class="inline">backend/scripts/ingest.py</code> · embeddings: <code class="inline">paraphrase-multilingual-MiniLM-L12-v2</code> (đa ngôn ngữ, hỗ trợ tiếng Việt)</p>
+    <div class="stack pipe">
+      <div class="step"><div class="n"></div><div>
+        <h4>Quét thư mục tài liệu</h4>
+        <p><code>data/pdfs/*.md</code> và <code>*.pdf</code> → <code>PyPDFLoader</code> (PDF) / <code>TextLoader</code> (Markdown). Gắn <code>metadata["source"] = tên file</code> để sau này trích dẫn nguồn.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Chia nhỏ (chunking)</h4>
+        <p><code>RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)</code> — mỗi chunk ~1000 ký tự, gối đầu 200 ký tự để không mất ngữ cảnh ở ranh giới.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Embedding (vector hoá)</h4>
+        <p><code>HuggingFaceEmbeddings</code> biến mỗi chunk thành vector số. Model đa ngôn ngữ chạy CPU, không cần API key.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Lưu vào ChromaDB</h4>
+        <p><code>Chroma.from_documents(...)</code> → persist vào <code>backend/chroma_db/</code>, collection <code>merchant_docs</code>. Đây là "bộ nhớ" tri thức của agent.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ============ FRONTEND ============ -->
+  <div class="section">
+    <h2><span class="num">C</span> Frontend — Single Page App</h2>
+    <p class="sub">React 19 + TypeScript + Vite + Tailwind v4. Routing thủ công bằng <code class="inline">window.location.pathname</code> trong <code class="inline">App.tsx</code>.</p>
+    <div class="row">
+      <div class="box accent-blue">
+        <span class="tag">Route /mc</span>
+        <h3>MerchantLanding</h3>
+        <p>Trang doanh nghiệp. persona = <code>merchant</code> → agent tư vấn giải pháp, KHÔNG lộ chi tiết kỹ thuật.</p>
+      </div>
+      <div class="box accent-blue">
+        <span class="tag">Route /dev</span>
+        <h3>MerchantDev</h3>
+        <p>Trang nhà phát triển. persona = <code>developer</code> → hỗ trợ API, code, debug.</p>
+      </div>
+      <div class="box accent-blue">
+        <span class="tag">Route / (mặc định)</span>
+        <h3>DocsApp</h3>
+        <p>Trang tài liệu: <code>DocsHeader</code> + <code>DocsSidebar</code> + <code>DocContent</code> + nút "Ask AI" mở <code>ChatOverlay</code>. persona = <code>developer</code>.</p>
+      </div>
+    </div>
+
+    <div class="flowlabel" style="margin-top:18px">— Trái tim client: hook <code class="inline">useChat.ts</code> —</div>
+    <div class="row">
+      <div class="box accent-cyan">
+        <span class="tag">State</span>
+        <h3>Quản lý hội thoại</h3>
+        <ul>
+          <li><code>messages[]</code> — mỗi tin có id (<code>crypto.randomUUID()</code>), role, content, sources</li>
+          <li><code>isLoading</code>, <code>AbortController</code> để huỷ request</li>
+          <li>Lịch sử <b>stateless</b>: gửi kèm theo mỗi request</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box accent-cyan">
+        <span class="tag">sendMessage()</span>
+        <h3>Gửi & nhận stream</h3>
+        <ul>
+          <li><code>fetch('/api/chat', {stream:true, persona})</code></li>
+          <li>Đọc <code>ReadableStream</code> qua <code>reader.read()</code></li>
+          <li>Tách dòng <code>data: ...</code> (SSE)</li>
+          <li>Hiệu ứng gõ chữ realtime vào bong bóng chat</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box accent-cyan">
+        <span class="tag">Hiển thị</span>
+        <h3>MessageBubble</h3>
+        <p>Render markdown bằng <code>react-markdown</code> + <code>remark-gfm</code>. Hỗ trợ accordion <code>:::steps</code> và stepper. Hiện nguồn tài liệu trích dẫn.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="pill">Vite proxy</span> dev: <code class="inline">/api → localhost:8000</code> (không CORS) ·
+      <span class="pill">prod</span> FastAPI tự serve file build từ <code class="inline">/static</code>
+    </div>
+  </div>
+
+  <!-- ============ BACKEND RAG — THE CORE ============ -->
+  <div class="section">
+    <h2><span class="num">D</span> Backend RAG — luồng xử lý 1 câu hỏi</h2>
+    <p class="sub">Request đi vào <code class="inline">routes/chat.py</code> → logic ở <code class="inline">services/rag.py</code>. Backend KHÔNG lưu trạng thái (history client gửi lên).</p>
+    <div class="stack pipe">
+      <div class="step"><div class="n"></div><div>
+        <h4>Nhận request — <code>POST /api/chat</code></h4>
+        <p>Body: <code>{ message, history[], stream:bool, persona }</code>. Nếu <code>stream=true</code> → <code>StreamingResponse</code> (SSE); ngược lại trả JSON. Lỗi → HTTP 500.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Dựng query truy hồi — <code>_build_retrieval_query()</code></h4>
+        <p>Ghép 2 lượt hỏi gần nhất của user + câu hỏi mới. Lý do: câu follow-up ngắn ("như sao?") embed kém nếu đứng một mình → cần neo ngữ cảnh.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Truy hồi vector — <code>_retrieve()</code></h4>
+        <p><code>get_vectorstore()</code> (singleton <code>@lru_cache</code>) → <code>as_retriever(k=5)</code> → lấy <b>5 chunk</b> liên quan nhất từ ChromaDB. Kèm tên file nguồn.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Ghép prompt — <code>_build_agent_message()</code></h4>
+        <p>Nối thành 1 chuỗi: <b>SYSTEM_PROMPT</b> (persona "Sky Agent" + luật Path A/B) + <b>PATH_CONTEXT</b>[persona] + <b>tài liệu</b> + <b>lịch sử</b> (tối đa 10 lượt) + <b>câu hỏi mới</b>.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Gọi LLM — <code>_call_agent()</code></h4>
+        <p><code>httpx.AsyncClient.post(agent_endpoint_url, {message: prompt})</code> tới AgentBase Runtime (timeout 120s). Kiểm tra <code>status == "success"</code> → lấy <code>data["response"]</code>.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Stream trả về — <code>rag_stream()</code></h4>
+        <p>① Gửi dòng nguồn <code>[SOURCES]a.md,b.md[/SOURCES]</code> trước. ② Agent trả full text 1 lần → backend "phát lại" từng từ qua SSE (delay 0.02s) tạo hiệu ứng gõ chữ. ③ Kết thúc <code>[DONE]</code>.</p>
+      </div></div>
+    </div>
+    <div class="legend">
+      <span><b>Định dạng SSE:</b></span>
+      <span class="pill">data: [SOURCES]...[/SOURCES]</span>
+      <span class="pill">data: "từ "</span>
+      <span class="pill">data: "tiếp "</span>
+      <span class="pill">data: [DONE]</span>
+    </div>
+  </div>
+
+  <!-- ============ SEQUENCE END TO END ============ -->
+  <div class="section">
+    <h2><span class="num">E</span> Sơ đồ tuần tự End-to-End (1 câu hỏi)</h2>
+    <p class="sub">Từ lúc người dùng gõ tới khi chữ hiện dần trên màn hình.</p>
+    <div class="stack">
+      <div class="row"><div class="box accent-blue" style="flex:1"><b>👤 User</b> gõ câu hỏi trên <code>ChatOverlay</code> → bấm gửi</div></div>
+      <div class="arrow down">↓</div>
+      <div class="row"><div class="box accent-cyan" style="flex:1"><b>useChat.sendMessage()</b> → thêm user msg + assistant msg rỗng (isStreaming) → <code>fetch POST /api/chat</code> với history & persona</div></div>
+      <div class="arrow down">↓ &nbsp;<span class="flowlabel" style="display:inline">HTTP (dev: Vite proxy → :8000)</span></div>
+      <div class="row"><div class="box accent-green" style="flex:1"><b>FastAPI /api/chat</b> → <code>rag_stream()</code> → truy hồi 5 chunk từ <b>ChromaDB</b> → ghép mega-prompt</div></div>
+      <div class="arrow down">↓ &nbsp;<span class="flowlabel" style="display:inline">httpx POST /invocations</span></div>
+      <div class="row"><div class="box accent-purple" style="flex:1"><b>AgentBase LLM Runtime</b> sinh câu trả lời đầy đủ (1 response JSON)</div></div>
+      <div class="arrow down">↑ &nbsp;<span class="flowlabel" style="display:inline">trả full text</span></div>
+      <div class="row"><div class="box accent-green" style="flex:1"><b>Backend</b> phát lại từng từ qua <b>SSE</b>: <code>[SOURCES]</code> → các token → <code>[DONE]</code></div></div>
+      <div class="arrow down">↓ &nbsp;<span class="flowlabel" style="display:inline">ReadableStream</span></div>
+      <div class="row"><div class="box accent-blue" style="flex:1"><b>useChat</b> parse từng dòng → cập nhật <code>content</code> dần → <b>MessageBubble</b> render markdown realtime + chips nguồn tài liệu</div></div>
+    </div>
+  </div>
+
+  <!-- ============ AGENT PERSONA ============ -->
+  <div class="section">
+    <h2><span class="num">F</span> "Bộ não" Sky Agent — System Prompt</h2>
+    <p class="sub">Định nghĩa trong <code class="inline">SYSTEM_PROMPT</code> tại <code class="inline">rag.py</code>. Cùng 1 agent, hành xử đổi theo persona.</p>
+    <div class="row">
+      <div class="box accent-amber">
+        <span class="tag">Path A · persona=merchant</span>
+        <h3>🏢 Doanh nghiệp</h3>
+        <ul>
+          <li>Tư vấn <b>chọn giải pháp</b> thanh toán theo mô hình KD</li>
+          <li>KHÔNG lộ API/param/code/tên file nội bộ</li>
+          <li>Tín hiệu→giải pháp: online→Payment Gateway/VietQR; cửa hàng→Zalopay Box; định kỳ→Agreement Pay</li>
+          <li>Kết bằng CTA mở, ngôn ngữ "quý đối tác"</li>
+        </ul>
+      </div>
+      <div class="box accent-pink">
+        <span class="tag">Path B · persona=developer</span>
+        <h3>👨‍💻 Nhà phát triển</h3>
+        <ul>
+          <li>Hỗ trợ <b>tích hợp kỹ thuật</b>: flow, code, webhook, debug</li>
+          <li>Base URL cố định (sandbox/production), không tự suy</li>
+          <li>Nhấn idempotent webhook, không retry mù, dùng <code>:::steps</code> cho flow phức tạp</li>
+          <li>Secret dùng placeholder <code>YOUR_SECRET_KEY</code></li>
+        </ul>
+      </div>
+      <div class="box accent-cyan">
+        <span class="tag">Nguyên tắc chung</span>
+        <h3>🛡️ RAG & Guardrails</h3>
+        <ul>
+          <li>Ưu tiên trả lời theo tài liệu, trích nguồn</li>
+          <li>Không có trong tài liệu → nói rõ, không bịa</li>
+          <li>Không so sánh đối thủ, không cam kết phí/SLA</li>
+          <li>Phí/hồ sơ/SLA → chuyển hotline/email mẫu</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DEPLOYMENT ============ -->
+  <div class="section">
+    <h2><span class="num">G</span> Đóng gói & triển khai (Deployment)</h2>
+    <p class="sub">Multi-stage Docker → 1 container duy nhất serve cả frontend + backend → VNG AgentBase Runtime, port 8080.</p>
+    <div class="stack pipe">
+      <div class="step"><div class="n"></div><div>
+        <h4>Stage 1 — Build frontend</h4>
+        <p><code>node:20-slim</code> → <code>npm ci</code> → <code>npm run build</code> (tsc + vite) → ra thư mục <code>dist/</code>.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Stage 2 — Backend runtime</h4>
+        <p><code>python:3.12-slim</code> → cài requirements + torch CPU + sentence-transformers. <b>Pre-download</b> embedding model vào image (tránh cold-start). Copy <code>app/</code>, <code>chroma_db/</code>, <code>data/</code> và <code>dist/ → /static</code>.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Entrypoint — <code>app/serve.py</code></h4>
+        <p>Bọc <code>app.main:app</code>, thêm <code>GET /health</code> (runtime yêu cầu) và mount <code>_SPAStaticFiles</code> phục vụ SPA — route <code>/mc</code>, <code>/dev</code> fallback về <code>index.html</code> thay vì 404.</p>
+      </div></div>
+      <div class="step"><div class="n"></div><div>
+        <h4>Chạy</h4>
+        <p><code>uvicorn app.serve:app --host 0.0.0.0 --port 8080</code> trên AgentBase Runtime (VNG Cloud). Cấu hình theo <code>.agentbase-state.json</code>.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ============ DEV COMMANDS ============ -->
+  <div class="section">
+    <h2><span class="num">H</span> Chạy local (dev)</h2>
+    <div class="row">
+      <div class="box accent-green">
+        <span class="tag">Backend · port 8000</span>
+        <h3>FastAPI</h3>
+        <p class="mono" style="font-size:12.5px; color:var(--code)">
+          cd backend<br/>
+          python -m venv .venv && source .venv/bin/activate<br/>
+          pip install -r requirements.txt<br/>
+          python scripts/ingest.py &nbsp;<span style="color:var(--muted)"># 1 lần</span><br/>
+          uvicorn app.main:app --reload
+        </p>
+      </div>
+      <div class="box accent-blue">
+        <span class="tag">Frontend · port 5173</span>
+        <h3>Vite</h3>
+        <p class="mono" style="font-size:12.5px; color:var(--code)">
+          cd frontend<br/>
+          npm install<br/>
+          npm run dev &nbsp;<span style="color:var(--muted)"># proxy /api→:8000</span><br/>
+          npm run build<br/>
+          npm run lint
+        </p>
+      </div>
+      <div class="box accent-amber">
+        <span class="tag">.env</span>
+        <h3>Cấu hình</h3>
+        <ul>
+          <li><code>agent_endpoint_url</code> — AgentBase /invocations</li>
+          <li><code>embedding_model</code> — MiniLM đa ngôn ngữ</li>
+          <li><code>chroma_db_path</code> = <code>./chroma_db</code></li>
+          <li><code>collection_name</code> = <code>merchant_docs</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Sơ đồ tạo tự động từ mã nguồn dự án <b>come-my-way</b> · Sky Agent (Zalopay Merchant Support) ·
+  Backend FastAPI + LangChain + ChromaDB · Frontend React 19 + Vite + Tailwind v4 · LLM trên VNG AgentBase
+</footer>
+
+</body>
+</html>

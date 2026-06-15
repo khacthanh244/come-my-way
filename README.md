@@ -2,6 +2,23 @@
 
 AI chatbot hỗ trợ merchant tra cứu thông tin từ tài liệu hướng dẫn PDF, không cần liên hệ support team.
 
+Zalopay Sky Agent
+
+Zalopay đang cung cấp nhiều giải pháp thanh toán cho đa dạng nhóm merchant. Tuy nhiên trong quá trình tìm hiểu sản phẩm, lựa chọn phương án tích hợp và triển khai kỹ thuật, merchant thường phải trao đổi qua lại nhiều lần với đội ngũ hỗ trợ để làm rõ tài liệu, luồng nghiệp vụ và cách tích hợp. Điều này tạo ra khối lượng lớn câu hỏi lặp lại, kéo dài thời gian go-live, ảnh hưởng SLA hỗ trợ và trải nghiệm của cả merchant lẫn Zalopay.
+
+Zalopay Sky Agent được xây dựng để trở thành chuyên gia hỗ trợ tích hợp AI 24/7, phục vụ hai nhóm người dùng chính:
+
+* **Business/Non-tech Merchant:** cần hiểu giải pháp phù hợp với mô hình kinh doanh, luồng thanh toán, điều kiện triển khai và các bước cần thực hiện. Link: https://endpoint-15f8ec91-d897-4115-9a68-ae732e37b29f.agentbase-runtime.aiplatform.vngcloud.vn/
+* **Technical Merchant (Developer):** cần hướng dẫn chi tiết về API, flow tích hợp, webhook, xử lý lỗi, debug và hỗ trợ sinh mã nguồn triển khai. Link: https://endpoint-15f8ec91-d897-4115-9a68-ae732e37b29f.agentbase-runtime.aiplatform.vngcloud.vn/dev
+
+Khi nhận câu hỏi từ merchant hoặc developer, Agent sẽ phân tích ý định người dùng, truy xuất thông tin từ tài liệu chính thức, FAQ, playbook xử lý lỗi và knowledge base của Zalopay. Dựa trên trình độ người dùng, Agent sẽ tự động điều chỉnh mức độ chi tiết của câu trả lời: từ giải thích tổng quan, sơ đồ luồng đơn giản cho người không chuyên đến hướng dẫn kỹ thuật chuyên sâu cho developer.
+
+Đối với nhóm kỹ thuật, Agent không chỉ giải thích tài liệu mà còn có khả năng sinh code mẫu dựa trên tài liệu tích hợp của Zalopay, hỗ trợ nhiều ngôn ngữ phổ biến như Java, NodeJS, Python và PHP. Agent có thể đề xuất đoạn mã gọi API, xử lý webhook, verify signature, kiểm tra lỗi và hướng dẫn debug theo từng tình huống cụ thể, giúp developer rút ngắn thời gian tích hợp và giảm phụ thuộc vào đội ngũ hỗ trợ.
+
+Điểm khác biệt của giải pháp là giao diện hội thoại trực quan, thân thiện với người dùng non-tech, cho phép tương tác đa lượt để làm rõ nhu cầu thay vì chỉ trả về kết quả tìm kiếm tài liệu. Agent có khả năng trình bày nội dung theo dạng hướng dẫn từng bước, sơ đồ luồng, checklist, video demo minh họa và mã nguồn mẫu giúp merchant dễ dàng hiểu và triển khai. Thông tin được hệ thống hóa, chuẩn hóa và cá nhân hóa theo từng tình huống sử dụng, giúp giảm tải cho đội ngũ hỗ trợ, rút ngắn thời gian tích hợp, nâng cao trải nghiệm merchant và tăng tốc độ go-live cho các giải pháp thanh toán của Zalopay.
+
+
+
 ## Kiến trúc
 
 ```
