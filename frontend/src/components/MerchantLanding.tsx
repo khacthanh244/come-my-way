@@ -76,7 +76,7 @@ const FAQS = [
 ]
 
 export function MerchantLanding() {
-  const { messages, isLoading, sendMessage, clearHistory } = useChat()
+  const { messages, isLoading, sendMessage, clearHistory } = useChat('merchant')
   const [chatOpen, setChatOpen] = useState(false)
   const [tab, setTab] = useState(0)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -87,7 +87,7 @@ export function MerchantLanding() {
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-100">
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ZaloPayLogo className="text-[22px]" />
+            <ZaloPayLogo className="h-7" />
           </div>
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-gray-700">
             <a href="#" className="hover:text-blue-1000">Trang chủ</a>
@@ -293,7 +293,7 @@ export function MerchantLanding() {
       <footer className="bg-dark-500 text-white py-12">
         <div className="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
           <div>
-            <ZaloPayLogo className="text-xl" onDark />
+            <ZaloPayLogo className="h-6" onDark />
             <p className="mt-3 text-sm text-blue-100/70">Tài chính tích hợp</p>
           </div>
           <div>
@@ -326,6 +326,7 @@ export function MerchantLanding() {
         <div className="fixed top-0 right-0 z-50 h-screen shadow-2xl">
           <ChatOverlay
             open={chatOpen}
+            persona="merchant"
             messages={messages}
             isLoading={isLoading}
             onSend={sendMessage}

@@ -1,20 +1,21 @@
 interface Props {
-  /** Tailwind text-size class controlling the wordmark size, e.g. "text-[22px]". */
+  /** Tailwind height class controlling the logo size, e.g. "h-7". */
   className?: string
-  /** Use the on-dark variant ("Zalo" turns white) for dark backgrounds. */
+  /** Use the on-dark variant (renders the logo in white) for dark backgrounds. */
   onDark?: boolean
 }
 
 /**
- * Official ZaloPay wordmark — "Zalo" in brand blue, "pay" in wealth green.
- * Single source of truth for the logo; do not inline the wordmark elsewhere.
- * See DESIGN_SYSTEM.md §5.
+ * Official Zalopay logo (wordmark image). Single source of truth for the logo;
+ * do not inline the wordmark elsewhere. See DESIGN_SYSTEM.md §5.
  */
-export function ZaloPayLogo({ className = 'text-[22px]', onDark = false }: Props) {
+export function ZaloPayLogo({ className = 'h-7', onDark = false }: Props) {
   return (
-    <span className={`font-extrabold tracking-tight leading-none ${className}`}>
-      <span className={onDark ? 'text-white' : 'text-blue-1000'}>Zalo</span>
-      <span className="text-green-1300">pay</span>
-    </span>
+    <img
+      src="/logo-zalopay-doanhnghiep.png"
+      alt="Zalopay"
+      draggable={false}
+      className={`${className} w-auto select-none ${onDark ? 'brightness-0 invert' : ''}`}
+    />
   )
 }

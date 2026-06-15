@@ -1,4 +1,4 @@
-# ZaloPay Integration API Documentation
+# Zalopay Integration API Documentation
 > Exported for AI agent knowledge base. Use dummy/mock data only — không dùng data thật.
 
 ---
@@ -15,7 +15,7 @@
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `app_id` | int64 | ✅ | Unique ID of the application, provided after merchant registration with ZaloPay. |
+| `app_id` | int64 | ✅ | Unique ID of the application, provided after merchant registration with Zalopay. |
 | `req_date` | int64 | ✅ | Timestamp when order was created (ms). Max drift: ±15 minutes. |
 | `app_trans_id` | string | ✅ | Unique transaction ID. Format: `yyMMddxxxxxxxxx`. Max 40 chars. Example: `180208181007242` |
 | `identifier` | string | ✅ | User's identifier on merchant system (user ID, phone, email, etc.) |
@@ -38,7 +38,7 @@ mac = HMAC_SHA256(hmac_input, app_hmac_key)
 |-----------|------|-------------|
 | `redirect_url` | URL string | Merchant web page to redirect after binding (Desktop flow) |
 | `redirect_deep_link` | URL string | Merchant app deep-link after binding (Mobile flow) |
-| `callback_url` | URL string | ZaloPay notifies this URL on binding success |
+| `callback_url` | URL string | Zalopay notifies this URL on binding success |
 | `embed_data` | JSON string | Merchant's own data. Use `"{}"` if empty |
 
 ### payment_data Fields
@@ -47,7 +47,7 @@ mac = HMAC_SHA256(hmac_input, app_hmac_key)
 |-----------|------|-------------|
 | `amount` | int64 | Amount to charge |
 | `description` | string | Text shown to user on payment confirm screen |
-| `callback_url` | URL string | ZaloPay notifies this URL on payment success |
+| `callback_url` | URL string | Zalopay notifies this URL on payment success |
 | `embed_data` | JSON string | Merchant's own data. Use `"{}"` if empty |
 
 ### Response (200 OK)

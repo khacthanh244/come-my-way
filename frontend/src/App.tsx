@@ -9,21 +9,21 @@ import { useChat } from './hooks/useChat'
 import { docs } from './lib/docs'
 
 const PAGE_TITLES: Record<string, string> = {
-  '/mc': 'ZaloPay Merchant — Giải pháp cho doanh nghiệp',
-  '/dev': 'ZaloPay Developer — Giải pháp tích hợp',
-  '': 'ZaloPay Merchant Docs — Tài liệu tích hợp',
+  '/mc': 'Zalopay Merchant — Giải pháp cho doanh nghiệp',
+  '/dev': 'Zalopay Developer — Giải pháp tích hợp',
+  '': 'Zalopay Merchant Docs — Tài liệu tích hợp',
 }
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '')
-  document.title = PAGE_TITLES[path] ?? 'ZaloPay Merchant'
+  document.title = PAGE_TITLES[path] ?? 'Zalopay Merchant'
   if (path === '/mc') return <MerchantLanding />
   if (path === '/dev') return <MerchantDev />
   return <DocsApp />
 }
 
 function DocsApp() {
-  const { messages, isLoading, sendMessage, clearHistory } = useChat()
+  const { messages, isLoading, sendMessage, clearHistory } = useChat('developer')
   const [chatOpen, setChatOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [activeSlug, setActiveSlug] = useState(docs[0]?.slug ?? '')
@@ -47,6 +47,7 @@ function DocsApp() {
         {activeDoc && <DocContent doc={activeDoc} />}
         <ChatOverlay
           open={chatOpen}
+          persona="developer"
           messages={messages}
           isLoading={isLoading}
           onSend={sendMessage}

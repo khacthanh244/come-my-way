@@ -10,7 +10,7 @@ export function DocsHeader({ search, onSearch, onAskAI }: Props) {
   return (
     <header className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 lg:px-6 h-14 flex items-center gap-6">
       <div className="flex items-center gap-2 shrink-0">
-        <ZaloPayLogo className="text-[20px]" />
+        <ZaloPayLogo className="h-6" />
         <span className="font-semibold text-[15px] text-dark-300">Docs</span>
       </div>
 

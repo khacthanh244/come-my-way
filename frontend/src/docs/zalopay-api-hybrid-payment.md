@@ -50,7 +50,7 @@ hmacinput = app_id + "|" + identifier + "|" + zp_trans_token + "|" + pay_token +
 > **Note [typo trong docs gốc]:** Trong công thức tính MAC của tài liệu gốc viết là `hmacinput = app_id + "|" + identifier + "|" + zp_trans_token + "|" + pay_token + "|" + req_date;` nhưng ở request body của API này **KHÔNG HỀ CÓ** trường `zp_trans_token` lẫn `req_date` mà chỉ có `app_trans_id` và `app_time`.
 > Thực tế, đây là lỗi copy-paste từ API `agreement-pay` của tài liệu gốc. Theo kinh nghiệm tích hợp, công thức MAC thực tế thường là:
 > `hmacinput = app_id + "|" + identifier + "|" + app_trans_id + "|" + pay_token + "|" + amount + "|" + app_time;` hoặc tương đương.
-> Merchant cần liên hệ trực tiếp với bộ phận kỹ thuật của ZaloPay để kiểm chứng lại chuỗi MAC cho API Hybrid Payment.
+> Merchant cần liên hệ trực tiếp với bộ phận kỹ thuật của Zalopay để kiểm chứng lại chuỗi MAC cho API Hybrid Payment.
 
 *   **Thuật toán:** SHA256
 *   **Khóa:** Khóa HMAC của ứng dụng (**key1**) được Zalopay cung cấp.
@@ -94,7 +94,7 @@ hmacinput = app_id + "|" + identifier + "|" + zp_trans_token + "|" + pay_token +
 
 - **mac not equal**
   * *Nguyên nhân:* Do lỗi copy-paste của docs gốc tạo nên sự mâu thuẫn về công thức MAC (chứa trường không gửi lên trong request).
-  * *Cách fix:* Kiểm tra lại với hỗ trợ kỹ thuật của ZaloPay để lấy đúng công thức tạo MAC cho API này (thường sử dụng `app_trans_id` và `app_time` thay thế).
+  * *Cách fix:* Kiểm tra lại với hỗ trợ kỹ thuật của Zalopay để lấy đúng công thức tạo MAC cho API này (thường sử dụng `app_trans_id` và `app_time` thay thế).
 - **Không nhận được solution_url khi trừ tiền qua token thất bại**
   * *Nguyên nhân:* Do lỗi logic tạo link thanh toán One-time của hệ thống hoặc do các tham số trong `embed_data` (như `redirecturl`) bị lỗi định dạng.
   * *Cách fix:* Rà soát lại giá trị trả về `sub_return_code` để tìm nguyên nhân gốc rễ và kiểm tra định dạng các trường đặc biệt.

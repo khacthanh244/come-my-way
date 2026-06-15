@@ -7,7 +7,7 @@ flow: Agreement Pay
 
 # Tạo một liên kết mới cho hợp đồng đồng thuận
 
-API này dùng để thiết lập một liên kết (binding) mới giữa tài khoản ví ZaloPay của người dùng và hệ thống của nhà cung cấp (merchant). Đây là bước đầu tiên trong luồng thanh toán tự động (Agreement Pay / Auto-debit), cho phép người dùng thực hiện uỷ quyền thanh toán để merchant có thể tự động trừ tiền trong tài khoản ví của họ ở các giao dịch tiếp theo mà không cần người dùng phải xác nhận lại.
+API này dùng để thiết lập một liên kết (binding) mới giữa tài khoản ví Zalopay của người dùng và hệ thống của nhà cung cấp (merchant). Đây là bước đầu tiên trong luồng thanh toán tự động (Agreement Pay / Auto-debit), cho phép người dùng thực hiện uỷ quyền thanh toán để merchant có thể tự động trừ tiền trong tài khoản ví của họ ở các giao dịch tiếp theo mà không cần người dùng phải xác nhận lại.
 
 > **Hỗ trợ:** `application/json`, `application/xml`, `application/x-www-form-urlencoded` (Dưới đây chỉ hiển thị 1 bản đại diện áp dụng chung).
 
@@ -37,7 +37,7 @@ Công thức tạo chữ ký MAC (sử dụng thuật toán HMAC-SHA256 với kh
 `hmacinput = app_id + | + apps_trans_id + | + binding_data + | + binding_type + | + identifier + | + max_amount + | + req_date;`
 
 > **[!NOTE]**
-> *   **[Typo trong docs gốc]**: Trong công thức MAC của tài liệu gốc, tên trường được ghi là `apps_trans_id` (có chữ 's') thay vì đúng chuẩn của request body là `app_trans_id`. Khi thực hiện tính toán, cần kiểm tra thực tế xem hệ thống ZaloPay nhận chuỗi hash nào (thường Merchant cần map chính xác giá trị của `app_trans_id` vào vị trí của biến này khi nối chuỗi).
+> *   **[Typo trong docs gốc]**: Trong công thức MAC của tài liệu gốc, tên trường được ghi là `apps_trans_id` (có chữ 's') thay vì đúng chuẩn của request body là `app_trans_id`. Khi thực hiện tính toán, cần kiểm tra thực tế xem hệ thống Zalopay nhận chuỗi hash nào (thường Merchant cần map chính xác giá trị của `app_trans_id` vào vị trí của biến này khi nối chuỗi).
 > *   Sử dụng **key1** được cấp trong Merchant Portal làm khoá ký chữ ký (sign key).
 
 ---
@@ -48,7 +48,7 @@ Công thức tạo chữ ký MAC (sử dụng thuật toán HMAC-SHA256 với kh
     *   `1` - SUCCESS (Giao dịch thành công)
     *   `2` - FAIL (Giao dịch thất bại)
     *   `3` - PROCESSING (Đang xử lý)
-    *   `-500` - SYSTEM_ERROR (Lỗi hệ thống ZaloPay)
+    *   `-500` - SYSTEM_ERROR (Lỗi hệ thống Zalopay)
     *   `-429` - LIMIT_REQUEST_REACH (Vượt quá giới hạn request cho phép)
     *   `406` - ILLEGAL_STATUS (Trạng thái không hợp lệ)
     *   `-405` - ILLEGAL_CLIENT_REQUEST (Yêu cầu từ client không hợp lệ)
@@ -59,8 +59,8 @@ Công thức tạo chữ ký MAC (sử dụng thuật toán HMAC-SHA256 với kh
 *   **`return_message`** (`string`): Thông báo kết quả chi tiết đi kèm.
 *   **`sub_return_code`** (`integer`): Mã lỗi phụ chi tiết từ hệ thống.
 *   **`sub_return_message`** (`string`): Thông báo lỗi phụ chi tiết.
-*   **`binding_id`** (`string`): Mã liên kết duy nhất được tạo ra từ hệ thống ZaloPay nếu giao dịch liên kết thành công.
-*   **`binding_url`** (`string`): URL dẫn đến trang liên kết của ZaloPay để Merchant điều hướng người dùng sang thực hiện xác nhận liên kết.
+*   **`binding_id`** (`string`): Mã liên kết duy nhất được tạo ra từ hệ thống Zalopay nếu giao dịch liên kết thành công.
+*   **`binding_url`** (`string`): URL dẫn đến trang liên kết của Zalopay để Merchant điều hướng người dùng sang thực hiện xác nhận liên kết.
 
 ---
 
@@ -70,8 +70,8 @@ Công thức tạo chữ ký MAC (sử dụng thuật toán HMAC-SHA256 với kh
     *   *Nguyên nhân:* Sai thứ tự các trường khi nối chuỗi MAC, sử dụng sai HMAC key (ví dụ: dùng nhầm `key2` để tạo MAC thay vì `key1`), hoặc lỗi format do truyền dữ liệu JSON lồng của trường `binding_data` không khớp giữa chuỗi lúc hash và chuỗi lúc gửi request.
     *   *Cách fix:* Kiểm tra lại thứ tự ghép chuỗi theo đúng tài liệu. Đảm bảo dùng **key1** để tạo mã hash HMAC-SHA256. Đảm bảo chuỗi `binding_data` sau khi được stringify phải đồng nhất 100% về mặt ký tự (bao gồm cả khoảng trắng, ký tự escape nếu có) giữa lúc tính MAC và lúc đưa vào JSON payload gửi đi.
 *   **Lỗi `-401` (binding hết hạn / ILLEGAL_DATA_REQUEST)**
-    *   *Nguyên nhân:* Tham số `req_date` (timestamp tính bằng ms) gửi lên bị lệch quá 15 phút so với giờ chuẩn của máy chủ ZaloPay, hoặc liên kết bị treo quá 15 phút kể từ lúc khởi tạo mà người dùng không xác nhận trên ứng dụng ZaloPay.
+    *   *Nguyên nhân:* Tham số `req_date` (timestamp tính bằng ms) gửi lên bị lệch quá 15 phút so với giờ chuẩn của máy chủ Zalopay, hoặc liên kết bị treo quá 15 phút kể từ lúc khởi tạo mà người dùng không xác nhận trên ứng dụng Zalopay.
     *   *Cách fix:* Cấu hình đồng bộ thời gian (NTP) cho server của Merchant. Trường hợp liên kết hết hạn do người dùng thao tác chậm, cần huỷ request cũ và tạo lại request liên kết mới với `app_trans_id` mới và `req_date` mới.
 *   **Merchant không nhận được kết quả liên kết thông qua Callback**
-    *   *Nguyên nhân:* Tham số `callback_url` không phải là URL public (ví dụ: cấu hình `localhost` hoặc mạng nội bộ), hệ thống firewall của Merchant chặn kết nối từ dải IP của ZaloPay, hoặc Merchant verify chữ ký callback thất bại do sử dụng sai key.
-    *   *Cách fix:* Cấu hình `callback_url` trỏ đến một địa chỉ HTTPS public có thể truy cập được từ internet. Đảm bảo mở firewall cho các IP từ ZaloPay. Khi nhận dữ liệu callback từ ZaloPay, Merchant bắt buộc phải sử dụng **key2** để verify chữ ký MAC đi kèm.
+    *   *Nguyên nhân:* Tham số `callback_url` không phải là URL public (ví dụ: cấu hình `localhost` hoặc mạng nội bộ), hệ thống firewall của Merchant chặn kết nối từ dải IP của Zalopay, hoặc Merchant verify chữ ký callback thất bại do sử dụng sai key.
+    *   *Cách fix:* Cấu hình `callback_url` trỏ đến một địa chỉ HTTPS public có thể truy cập được từ internet. Đảm bảo mở firewall cho các IP từ Zalopay. Khi nhận dữ liệu callback từ Zalopay, Merchant bắt buộc phải sử dụng **key2** để verify chữ ký MAC đi kèm.

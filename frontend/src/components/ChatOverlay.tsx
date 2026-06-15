@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import type { Message } from '../hooks/useChat'
+import type { Message, Persona } from '../hooks/useChat'
 import { MessageBubble } from './MessageBubble'
 
 interface Props {
@@ -9,22 +9,38 @@ interface Props {
   onSend: (text: string) => void
   onNewChat: () => void
   onClose: () => void
+  persona?: Persona
 }
 
-const SUGGESTIONS = [
-  'Tích hợp Agreement Pay như thế nào?',
-  'API tạo order cần những tham số gì?',
-  'Cách xử lý khi liên kết ví thất bại?',
-]
+const SUGGESTIONS_BY_PERSONA: Record<Persona, string[]> = {
+  merchant: [
+    'Tôi bán hàng online thì nên dùng giải pháp nào?',
+    'Cửa hàng muốn nhận thanh toán tại quầy thì sao?',
+    'Tôi muốn thu phí định kỳ cho gói hội viên?',
+  ],
+  developer: [
+    'Flow tích hợp Agreement Pay như thế nào?',
+    'API tạo order cần những tham số gì?',
+    'Cách xử lý khi liên kết ví thất bại?',
+  ],
+}
 
-export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onClose }: Props) {
+export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onClose, persona = 'merchant' }: Props) {
+  const SUGGESTIONS = SUGGESTIONS_BY_PERSONA[persona]
   const [value, setValue] = useState('')
   const [width, setWidth] = useState(Math.round(window.innerWidth / 3))
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const lastUserRef = useRef<HTMLDivElement>(null)
+  const prevLenRef = useRef(0)
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    // On a new turn, bring the user's question to the TOP of the view so the
+    // answer can be read from its beginning — don't yank the view to the bottom
+    // as the (often long) answer streams in.
+    if (messages.length > prevLenRef.current) {
+      lastUserRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    prevLenRef.current = messages.length
+  }, [messages.length])
 
   const startResize = useCallback((e: React.PointerEvent) => {
     e.preventDefault()
@@ -61,6 +77,10 @@ export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onCl
   }
 
   const empty = messages.length === 0
+  let lastUserIndex = -1
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === 'user') { lastUserIndex = i; break }
+  }
 
   return (
     <div
@@ -101,14 +121,14 @@ export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onCl
       {/* Body */}
       {empty ? (
         <div className="flex-1 flex flex-col justify-end px-4 pb-3 overflow-hidden">
-          <div className="flex flex-col items-center gap-2 mb-auto mt-16">
-            <img src="/icon.png" alt="" className="w-10 h-10 opacity-90" />
-            <p className="text-lg text-gray-700">Hỏi em đi</p>
+          <div className="flex flex-col items-center text-center gap-2 mb-auto mt-12 px-2">
+            <img src="/icon.png" alt="" className="w-12 h-12 opacity-90 mb-1" />
+            <h2 className="text-xl font-extrabold text-dark-500 leading-snug">Welcome to Zalopay Sky Agent!</h2>
+            <p className="text-sm text-dark-300 leading-relaxed">
+              Trợ lý AI thế hệ mới – Hỗ trợ giải pháp thanh toán tối ưu cho doanh nghiệp của bạn
+            </p>
           </div>
           <div className="text-sm text-gray-600 mb-3">
-            <p className="mb-3">
-              Hỏi về tài liệu tích hợp merchant và nhận hỗ trợ cho việc tích hợp của bạn.
-            </p>
             <div className="flex flex-col gap-2">
               {SUGGESTIONS.map(q => (
                 <button
@@ -124,8 +144,10 @@ export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onCl
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto px-3 py-4">
-          {messages.map(msg => (
-            <MessageBubble key={msg.id} message={msg} />
+          {messages.map((msg, i) => (
+            <div key={msg.id} ref={i === lastUserIndex ? lastUserRef : undefined} className="scroll-mt-3">
+              <MessageBubble message={msg} />
+            </div>
           ))}
           {isLoading && messages[messages.length - 1]?.role === 'user' && (
             <div className="flex justify-start mb-4">
@@ -136,27 +158,26 @@ export function ChatOverlay({ open, messages, isLoading, onSend, onNewChat, onCl
               </div>
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
       )}
 
       {/* Input */}
       <div className="shrink-0 px-3 pb-3">
-        <div className="relative">
+        <div className="flex items-center gap-1 rounded-full border border-gray-300 pl-4 pr-1.5 focus-within:border-blue-1000 focus-within:ring-1 focus-within:ring-blue-1000">
           <textarea
             rows={1}
             value={value}
             onChange={e => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
-            placeholder="Đặt câu hỏi về trang tài liệu"
-            className="w-full resize-none rounded-full border border-gray-300 px-4 py-2.5 pr-12 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-1000 focus:ring-1 focus:ring-blue-1000 disabled:opacity-50"
+            placeholder="Đặt câu hỏi cho Sky Agent"
+            className="flex-1 resize-none bg-transparent py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none disabled:opacity-50"
           />
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !value.trim()}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-blue-1000 hover:text-white disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-500 flex items-center justify-center transition-colors"
-            title="Gửi"
+            aria-label="Gửi"
+            className="shrink-0 w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-blue-1000 hover:text-white disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-500 flex items-center justify-center transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M12 19V5M5 12l7-7 7 7" strokeLinecap="round" strokeLinejoin="round" />

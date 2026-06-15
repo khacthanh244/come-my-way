@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ===== ZaloPay Design System tokens (see DESIGN_SYSTEM.md) ===== */
+/* ===== Zalopay Design System tokens (see DESIGN_SYSTEM.md) ===== */
 @theme {
   /* Brand */
   --color-blue-1000: #0033c9; /* Primary — buttons, header, links */
@@ -154,6 +154,18 @@ body {
   border: none;
   border-top: 1px solid var(--color-divider);
   margin: 0.85rem 0;
+}
+
+/* Stepper (ordered-list) title/body margin resets */
+.chat-md .step-title p {
+  margin: 0;
+  display: inline;
+}
+.chat-md .step-body > *:first-child {
+  margin-top: 0;
+}
+.chat-md .step-body > *:last-child {
+  margin-bottom: 0;
 }
 
 /* Markdown styling for doc pages */

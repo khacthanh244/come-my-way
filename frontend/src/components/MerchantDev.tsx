@@ -12,29 +12,29 @@ const NAV = [
 ]
 
 const HERO_TILES = [
-  'Thanh toán ZaloPay QR đa năng',
+  'Thanh toán Zalopay QR đa năng',
   'Thanh toán QR',
   'App to App',
   'Mobile Web to App',
-  'Cổng ZaloPay',
+  'Cổng Zalopay',
   'QuickPay',
   'Web in app',
   'QR tĩnh tại quầy',
-  'Tích hợp cổng ZaloPay trên Shopify',
+  'Tích hợp cổng Zalopay trên Shopify',
 ]
 
 const SOLUTIONS = [
-  { title: 'Thanh toán QR', icon: '📱', color: 'text-blue-1000', desc: 'Dùng app ZaloPay quét mã QR trên website của Merchant, sau đó bấm xác nhận để thực hiện thanh toán.' },
-  { title: 'App to App', icon: '🔗', color: 'text-emerald-500', desc: 'Trên App của Merchant, chọn thanh toán bằng ZaloPay, app ZaloPay được gọi để thanh toán.' },
-  { title: 'Mobile Web to App', icon: '</>', color: 'text-purple-500', desc: 'Chọn thanh toán bằng ZaloPay trên Mobile Web của Merchant, app ZaloPay được gọi để thanh toán.' },
-  { title: 'Cổng ZaloPay', icon: '🗂️', color: 'text-orange-500', desc: 'Chọn hình thức thanh toán bằng thẻ ATM, Internet Banking, thẻ Quốc tế, Apple Pay, ZaloPay QR đa năng trên web của Merchant, ZaloPay GateWay được gọi để thanh toán.' },
-  { title: 'QuickPay', icon: '▮▮▮', color: 'text-blue-1000', desc: 'Thu ngân của Merchant quét mã QR cá nhân của khách hàng trong app ZaloPay và thực hiện thanh toán.' },
-  { title: 'Web in app', icon: '🟩', color: 'text-emerald-500', desc: 'Trong app ZaloPay, chọn ứng dụng web của Merchant và mua hàng. Số tiền thanh toán sẽ được trừ vào ví ZaloPay.' },
-  { title: 'QR tĩnh tại quầy', icon: '🧾', color: 'text-rose-500', desc: 'Khách hàng dùng app ZaloPay quét mã QR của Merchant tại quầy, sau đó nhập số tiền và thực hiện thanh toán.' },
+  { title: 'Thanh toán QR', icon: '📱', color: 'text-blue-1000', desc: 'Dùng app Zalopay quét mã QR trên website của Merchant, sau đó bấm xác nhận để thực hiện thanh toán.' },
+  { title: 'App to App', icon: '🔗', color: 'text-emerald-500', desc: 'Trên App của Merchant, chọn thanh toán bằng Zalopay, app Zalopay được gọi để thanh toán.' },
+  { title: 'Mobile Web to App', icon: '</>', color: 'text-purple-500', desc: 'Chọn thanh toán bằng Zalopay trên Mobile Web của Merchant, app Zalopay được gọi để thanh toán.' },
+  { title: 'Cổng Zalopay', icon: '🗂️', color: 'text-orange-500', desc: 'Chọn hình thức thanh toán bằng thẻ ATM, Internet Banking, thẻ Quốc tế, Apple Pay, Zalopay QR đa năng trên web của Merchant, Zalopay GateWay được gọi để thanh toán.' },
+  { title: 'QuickPay', icon: '▮▮▮', color: 'text-blue-1000', desc: 'Thu ngân của Merchant quét mã QR cá nhân của khách hàng trong app Zalopay và thực hiện thanh toán.' },
+  { title: 'Web in app', icon: '🟩', color: 'text-emerald-500', desc: 'Trong app Zalopay, chọn ứng dụng web của Merchant và mua hàng. Số tiền thanh toán sẽ được trừ vào ví Zalopay.' },
+  { title: 'QR tĩnh tại quầy', icon: '🧾', color: 'text-rose-500', desc: 'Khách hàng dùng app Zalopay quét mã QR của Merchant tại quầy, sau đó nhập số tiền và thực hiện thanh toán.' },
 ]
 
 export function MerchantDev() {
-  const { messages, isLoading, sendMessage, clearHistory } = useChat()
+  const { messages, isLoading, sendMessage, clearHistory } = useChat('developer')
   const [chatOpen, setChatOpen] = useState(false)
 
   return (
@@ -42,7 +42,7 @@ export function MerchantDev() {
       {/* Header */}
       <header className="sticky top-0 z-30 bg-white border-b border-gray-100">
         <div className="mx-auto max-w-[1280px] px-6 h-16 flex items-center gap-5">
-          <ZaloPayLogo className="text-[22px] shrink-0" />
+          <ZaloPayLogo className="h-7 shrink-0" />
 
           <div className="relative w-64 shrink-0">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export function MerchantDev() {
             <svg className="w-4 h-4 text-blue-1000" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2z" />
             </svg>
-            <span className="hidden sm:inline">Tư vấn giải pháp với Zalopay AI</span>
+            <span className="hidden sm:inline">Zalopay AI</span>
           </button>
 
           <nav className="ml-auto hidden lg:flex items-center gap-5 text-xs font-semibold text-gray-600">
@@ -113,7 +113,7 @@ export function MerchantDev() {
       {/* Solutions grid */}
       <section className="bg-app pb-16">
         <div className="mx-auto max-w-[1100px] px-6">
-          <h2 className="text-center text-2xl font-bold text-gray-900">Các giải pháp tích hợp ZaloPay</h2>
+          <h2 className="text-center text-2xl font-bold text-gray-900">Các giải pháp tích hợp Zalopay</h2>
           <p className="mt-2 text-center text-sm text-gray-500">Phù hợp với nhiều loại hình doanh nghiệp</p>
 
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -161,7 +161,7 @@ export function MerchantDev() {
             <span>📞 Hotline: <a className="text-blue-1000">1900 54 54 36</a></span>
             <span>✉️ Email: <a className="text-blue-1000">hotro@zalopay.vn</a></span>
           </div>
-          <p className="mt-6 text-xs text-gray-400">© 2026, bản quyền của <span className="text-blue-1000">ZaloPay</span></p>
+          <p className="mt-6 text-xs text-gray-400">© 2026, bản quyền của <span className="text-blue-1000">Zalopay</span></p>
         </div>
       </footer>
 
@@ -183,6 +183,7 @@ export function MerchantDev() {
         <div className="fixed top-0 right-0 z-50 h-screen shadow-2xl">
           <ChatOverlay
             open={chatOpen}
+            persona="developer"
             messages={messages}
             isLoading={isLoading}
             onSend={sendMessage}

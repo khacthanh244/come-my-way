@@ -8,7 +8,9 @@ export interface Message {
   isStreaming?: boolean
 }
 
-export function useChat() {
+export type Persona = 'merchant' | 'developer'
+
+export function useChat(persona: Persona = 'merchant') {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
@@ -42,7 +44,7 @@ export function useChat() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history, stream: true }),
+        body: JSON.stringify({ message: text, history, stream: true, persona }),
         signal: abortRef.current.signal,
       })
 

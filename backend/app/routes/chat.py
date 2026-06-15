@@ -16,6 +16,8 @@ class ChatRequest(BaseModel):
     message: str
     history: list[HistoryItem] = []
     stream: bool = False
+    # Which page the user is on: "merchant" (/mc) or "developer" (/dev, /docs).
+    persona: str = "merchant"
 
 
 @router.get("/health")
@@ -30,12 +32,12 @@ async def chat(req: ChatRequest):
     try:
         if req.stream:
             return StreamingResponse(
-                rag_stream(req.message, history),
+                rag_stream(req.message, history, req.persona),
                 media_type="text/event-stream",
                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
             )
 
-        result = await rag_answer(req.message, history)
+        result = await rag_answer(req.message, history, req.persona)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
