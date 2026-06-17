@@ -14,3 +14,4 @@ greennode-agentbase-skills/
 *.md
 !frontend/src/docs/*.md
 !backend/data/pdfs/*.md
+.env

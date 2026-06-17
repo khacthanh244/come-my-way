@@ -11,15 +11,17 @@ import { docs } from './lib/docs'
 const PAGE_TITLES: Record<string, string> = {
   '/mc': 'Zalopay Merchant — Giải pháp cho doanh nghiệp',
   '/dev': 'Zalopay Developer — Giải pháp tích hợp',
-  '': 'Zalopay Merchant Docs — Tài liệu tích hợp',
+  '/bk': 'Zalopay Merchant Docs — Tài liệu tích hợp',
+  '': 'Zalopay Merchant — Giải pháp cho doanh nghiệp',
 }
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '')
   document.title = PAGE_TITLES[path] ?? 'Zalopay Merchant'
-  if (path === '/mc') return <MerchantLanding />
   if (path === '/dev') return <MerchantDev />
-  return <DocsApp />
+  if (path === '/bk') return <DocsApp />
+  // Default ('/') and '/mc' both show the merchant landing page.
+  return <MerchantLanding />
 }
 
 function DocsApp() {

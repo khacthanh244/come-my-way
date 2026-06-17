@@ -29,11 +29,23 @@ function normalizeMath(src: string): string {
   return out
 }
 
+// Render links so they open in a new tab (with safe rel).
+function MdLink({ href, children, ...props }: React.ComponentProps<'a'>) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+      {children}
+    </a>
+  )
+}
+
 // One markdown chunk. `stepper` turns ordered lists into the collapsible
 // timeline; without it, ordered lists render as a plain numbered list.
 function MdChunk({ children, stepper }: { children: string; stepper?: boolean }) {
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={stepper ? { ol: StepperList } : undefined}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={stepper ? { ol: StepperList, a: MdLink } : { a: MdLink }}
+    >
       {children}
     </ReactMarkdown>
   )
